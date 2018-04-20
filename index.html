@@ -8,16 +8,16 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manip
     <title>Title</title>
     <script type="text/javascript">
       function draw() {
-      	var canvas = document.getElementById('canvas1');
-      	var srcElement = document.getElementById('source');
+        var canvas = document.getElementById('canvas1');
+        var srcElement = document.getElementById('source');
         var ctx = canvas.getContext('2d');
         var img = new Image();
         img.onload = function() {
-        	ctx.drawImage(img,0,0);
-        	var myImageData = ctx.getImageData(0, 0, img.width, img.height);
-    	};
-    	img.src = srcElement.value;
-        //img.src = 'https://drive.google.com/open?id=1B1tO08RDYkibMCY_CDzD40SP2cIJ9Ai1';
+          ctx.drawImage(img,0,0);
+          var myImageData = ctx.getImageData(0, 0, img.width, img.height);
+      };
+      //img.src = srcElement.value;
+        img.src = './img1.jpg';
         
         
       }
@@ -27,11 +27,11 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manip
     </style>
   </head>
   <body>
-  	<label for="source">Image link:</label>
-  	<input type="text" id="source" /><br>
-  	<button type="submit" onclick="draw()" >
-  		Encrypt!
-	</button>
+    <label for="source">Image link:</label>
+    <input type="text" id="source" /><br>
+    <button type="submit" onclick="draw()" >
+      Encrypt!
+  </button>
     <canvas id="canvas1" width="2000" height="1333"></canvas>
   </body>
 </html>
