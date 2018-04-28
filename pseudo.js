@@ -65,6 +65,9 @@ function smallestGeneratorOf(p) {
 
 // co primes
 function coPrimes(p) {
+	if (p % 2 == 1) {
+		throw "p is assumed to be non-prime and even (as it is a prime minus 1)";
+	}
 	function euclid(a, b) {
 		while (b != 0) {
 			var r = a % b;
@@ -73,7 +76,6 @@ function coPrimes(p) {
 		}
 		return a;
 	}
-	// p is assumed to be non-prime and even 
 	var coprimes = [];
 	for (var i=3; i<p; i+=2) {
 		if (euclid(i,p) == 1) {
@@ -83,5 +85,46 @@ function coPrimes(p) {
 	return coprimes;
 }
 
-var p = findBiggestPrimeSmallerThan(12000000);
-console.log(coPrimes(p-1));
+function generateCyclicGroup(g,p,limit) {
+	if (!limit) {
+		limit = p-1;
+	}
+	var big = bigInt(g);
+	var cyclicGroup = [];
+	lastElement = 0;
+	for (var i=1; lastElement !== 1 && i <= limit; i++) {
+		lastElement = big.modPow(i,p).toJSNumber();
+		cyclicGroup.push(lastElement);
+	}
+	return cyclicGroup;
+}
+
+function randomArrayIndex(size) {
+	var r = Math.random();
+	return Math.floor(r * (size-1));
+}
+
+
+
+function algorithm(n) {
+	console.log("input = "+n);
+	var p = findBiggestPrimeSmallerThan(n);
+	console.log("biggest prime smaller than input = "+p);
+	console.log("finding smallest genertor for "+p+"...");
+	var g = smallestGeneratorOf(p);
+	console.log("smallest generator found = "+g);
+	var generatorPowers = coPrimes(p-1);
+	console.log("number of generator powers found = "+generatorPowers.length);
+	var randomPower = randomArrayIndex(generatorPowers.length);
+	var generatorPower = generatorPowers[randomPower];
+	console.log("picked random power = " + generatorPower);
+	var newGenerator = bigInt(g).modPow(generatorPower,p).toJSNumber();
+	console.log("found new possible generator = "+newGenerator);
+	console.log("checking if new number is actually generator... ");
+	console.log(isGenerator(newGenerator,p));
+	var limit = 10;
+	console.log("generating cyclic group with limit = "+limit);
+	console.log(generateCyclicGroup(newGenerator, p, limit));
+}
+
+algorithm(1333*1333);
