@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.App-header {
+  background-image: url("https://cdn-images-1.medium.com/max/1280/1*dQyfOpFWmSxrmdOcQgW6OQ.jpeg");
+  height: 250px;
+  min-width: 100%;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.flex-row {
+  display:flex;
+  flex-direction: row;
+}
+
+h2,h3 {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 40px;
+  margin-left: 10px;
+}
+
+
+.main-image-original-vs-stego {
+  height: 180px;
+}
+
+p {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.encode-images-grid {
+ margin: 50px 10px 10px 10px;
+}
+
+
+@keyframes dropdown {
+  0% {
+    background-color: grey;
+  }
+  100% {
+    background-color: #e7e7e7;
+  }
+}
+
+.nav-animation:hover {
+  animation-name: dropdown;
+  animation-duration:  2s;
+
+  /*animation: dropdown 2s timing-function delay iteration-count direction fill-mode;*/
+}
