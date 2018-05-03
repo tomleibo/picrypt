@@ -4,6 +4,8 @@ import App, {Header} from "./App";
 import NavBar from "./NavBar";
 import {EncodeForm} from "./Encode";
 import {DecodeForm} from "./Decode";
+import {Footer} from "./Footer";
+
 export class Routes extends React.PureComponent {
     render(){
         return <Router>
@@ -13,6 +15,7 @@ export class Routes extends React.PureComponent {
                 <Route exact path="/" component={App} />
                 <Route path="/encode" component={EncodeForm} />
                 <Route path="/decode" component={DecodeForm} />
+                <Footer/>
             </div>
         </Router>
     }
