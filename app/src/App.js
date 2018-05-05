@@ -8,11 +8,14 @@ import {Jumbotron} from "react-bootstrap";
 
 export const Header = () => (
     <div className="App">
-        <header className="App-header">
+        <header className={ !navigator.onLine ? "App-header-offline" : "App-header"}>
 
-            <h1 className="App-title">Welcome to pic-crypt</h1>
+            <h1 className="App-title">Welcome to pic-crypt </h1>
             <p className="App-intro">
                 Encode messages in image.bmp files.
+            </p>
+            <p className={`App-intro ${!navigator.onLine ? "" : "hidden"}`}>
+                You are now offline. Enjoy the app!
             </p>
         </header>
     </div>
