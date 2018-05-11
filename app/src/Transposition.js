@@ -106,12 +106,14 @@ Transposition.prototype.randomArrayIndex = function(size) {
 };
 
 Transposition.prototype.sendUIEvent = function(msg) {
-	//console.log(msg);
+	console.log(msg);
 };
 
 Transposition.prototype.generate = function() {
 	return this.algorithm(this.p);
 };
+
+
 
 Transposition.prototype.restore = function(i) {
 	return this.algorithm(this.p,i)
@@ -214,11 +216,12 @@ Transposition.prototype.reveal = function(pixelData, cyclicGroup, length) {
 
 
 //TODO connect with image uploaded and draw onto a real canvas
-Transposition.prototype.draw = function (elementId,plainText) {
-	var canvas = document.getElementById(elementId);
-    img.onload = function() {
+Transposition.prototype.draw = function (plainText) {
+	var canvas = document.getElementById("banana");
+    img.onload = function() 	{
         ctx.drawImage(img,0,0);
         var pixelData = ctx.getImageData(0, 0, img.width, img.height);
+        // pixelData.data
         // actual size is X4 than that, but we want to use only the alpha??
         var colorDataLength = img.width * img.height;
         for (var i=0; i<binaryPT.length; i++) {

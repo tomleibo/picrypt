@@ -48,7 +48,26 @@ export class EncodeForm extends React.Component {
     }
 
     injectCipherText() {
-            //TOM
+
+        // let cyclicGroup = tom.generate();
+        const canvas = document.getElementById("banana");
+        const ctx = canvas.getContext("2d");
+        let image = document.images[0];
+        ctx.putImageData(image,0,0);
+
+        let imageData = ctx.getImageData(0,0,image.width,image.height);
+        const tom = new Transposition(imageData.data.length);
+        const { index, group } = tom.generate();
+        let pic = tom.conceal(this.state.plainText, imageData.data, group);
+        ctx.drawImage(imageData,0,0);
+
+        const da = 1;
+
+        // let conceal = tom.conceal(
+        //     this.state.plainText,
+        //     this.state.imageBytes,
+        //     cyclicGroup.group
+        // );
         return this.state.imageBytes;
     }
 
@@ -130,11 +149,12 @@ export class EncodeForm extends React.Component {
                             </Thumbnail>
                         </Col>
                         <Col xs={6} md={6}>
-                            <Thumbnail id="ItemPreview2" src={`data:image/png;base64,${btoa(this.state.imageBytesAfterEncoding)}`}
-                                   alt="after-encoding" rounded responcive>
-                                <h3>Injected Image</h3>
-                                <p>Try to notice differences!</p>
-                            </Thumbnail>
+                            <canvas id="banana"></canvas>
+                            {/*<Thumbnail id="ItemPreview2" src={`data:image/png;base64,${btoa(this.state.imageBytesAfterEncoding)}`}*/}
+                                   {/*alt="after-encoding" rounded responcive>*/}
+                                {/*<h3>Injected Image</h3>*/}
+                                {/*<p>Try to notice differences!</p>*/}
+                            {/*</Thumbnail>*/}
                         </Col>
                     </Row>
                 </Grid>
