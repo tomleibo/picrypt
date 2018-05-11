@@ -6,9 +6,11 @@
  */
 
 //npm install big-integer
-var bigInt = require("big-integer");
 
-var Transposition = function (n) {
+
+import bigInt from "big-integer";
+
+export var Transposition = function (n) {
 	this.p = this.findBiggestPrimeSmallerThan(n);
 };
 
@@ -214,23 +216,23 @@ Transposition.prototype.reveal = function(pixelData, cyclicGroup, length) {
 //TODO connect with image uploaded and draw onto a real canvas
 Transposition.prototype.draw = function (elementId,plainText) {
 	var canvas = document.getElementById(elementId);
-	var binaryPT = this.stringToBin(plainText);
-	var ctx = canvas.getContext('2d');
-	var img = new Image();
-	img.onload = function() {
-		ctx.drawImage(img,0,0);
-		var pixelData = ctx.getImageData(0, 0, img.width, img.height);
-		// actual size is X4 than that, but we want to use only the alpha??
-		var colorDataLength = img.width * img.height;
-		for (var i=0; i<binaryPT.length; i++) {
-			if (binaryPT[i] === "1") {
-				pixelData.data[i*4+3]--;
-			}
-		}
-		ctx.putImageData(pixelData,0,0);
-	};
+    img.onload = function() {
+        ctx.drawImage(img,0,0);
+        var pixelData = ctx.getImageData(0, 0, img.width, img.height);
+        // actual size is X4 than that, but we want to use only the alpha??
+        var colorDataLength = img.width * img.height;
+        for (var i=0; i<binaryPT.length; i++) {
+            if (binaryPT[i] === "1") {
+                pixelData.data[i*4+3]--;
+            }
+        }
+        ctx.putImageData(pixelData,0,0);
+    };
+    var binaryPT = this.stringToBin(plainText);
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
 	//img.src = srcElement.value;
-	img.src = data;
+	// img.src = data;
 
 
 };

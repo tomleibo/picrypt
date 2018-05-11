@@ -2,6 +2,8 @@ import React from "react";
 import {Button, Col, ControlLabel, FormControl, FormGroup, Grid, HelpBlock, Row, Thumbnail} from "react-bootstrap";
 import CryptoJs from "crypto-js";
 
+import { Transposition} from "./Transposition";
+
 export class EncodeForm extends React.Component {
 
     constructor(props, context) {
@@ -46,7 +48,7 @@ export class EncodeForm extends React.Component {
     }
 
     injectCipherText() {
-        //TOM
+            //TOM
         return this.state.imageBytes;
     }
 
