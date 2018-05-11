@@ -23,9 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c47db-1ac9-4a61-b45f-f4fe28d5ed0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/Encode.js" afterPath="$PROJECT_DIR$/app/src/Encode.js" />
-      <change beforePath="$PROJECT_DIR$/app/src/Transposition.js" afterPath="$PROJECT_DIR$/app/src/Transposition.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -58,8 +56,8 @@
       <file leaf-file-name="Encode.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/Encode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="56" column="0" lean-forward="true" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="286">
+              <caret line="62" column="8" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="8" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -530,12 +528,12 @@
       <updated>1525410366130</updated>
       <workItem from="1525410369159" duration="453000" />
       <workItem from="1525522987668" duration="1481000" />
-      <workItem from="1526034578216" duration="4781000" />
+      <workItem from="1526034578216" duration="4856000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8183000" />
+    <option name="totallyTimeSpent" value="8258000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="878" extended-state="0" />
@@ -942,8 +940,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/Encode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="56" column="0" lean-forward="true" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+        <state relative-caret-position="286">
+          <caret line="62" column="8" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="8" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>

@@ -53,13 +53,15 @@ export class EncodeForm extends React.Component {
         const canvas = document.getElementById("banana");
         const ctx = canvas.getContext("2d");
         let image = document.images[0];
-        ctx.putImageData(image,0,0);
+        ctx.drawImage(image,0,0);
 
         let imageData = ctx.getImageData(0,0,image.width,image.height);
         const tom = new Transposition(imageData.data.length);
         const { index, group } = tom.generate();
+        let originalData = JSON.parse(JSON.stringify(imageData.data));
         let pic = tom.conceal(this.state.plainText, imageData.data, group);
-        ctx.drawImage(imageData,0,0);
+
+        ctx.putImageData(imageData,0,0);
 
         const da = 1;
 
