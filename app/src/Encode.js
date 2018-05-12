@@ -14,6 +14,7 @@ import {
 import CryptoJs from "crypto-js";
 
 import spinner from "./assets/spinner.svg";
+import {Transposition} from "./Transposition";
 
 export class EncodeForm extends React.Component {
 
@@ -80,12 +81,18 @@ export class EncodeForm extends React.Component {
         ]);
 
         worker.onmessage = (e) => {
-            const {imageBytesAfterEncoding,index,encryptedMessageLenInBits} = e.data;
+            const {encryptedMessageLenInBits,index,group} = e.data;
+            const transposition = new Transposition(imageData.data.length);
+            transposition.conceal(
+                encryptedPlaintext,
+                imageData.data,
+                group
+            );
             this.setState({
                 generatorIdx: index,
                 encryptedMessageLenInBits: encryptedMessageLenInBits,
                 showSpinner: false,
-                imageBytesAfterEncoding
+                imageBytesAfterEncoding: imageData
             });
         };
     }

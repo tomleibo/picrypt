@@ -12,17 +12,13 @@ onmessage = function(e) {
     console.log(`group is ${group} index is: ${index}`);
     const encryptedMessageLenInBits = transposition
         .stringToBin(encryptedPlaintext);
-    transposition.conceal(
-        encryptedPlaintext,
-        imageData,
-        group
-    );
+
 
     console.log('Posting message back to main script');
     postMessage(
         {
             index,
             encryptedMessageLenInBits,
-            imageBytesAfterEncoding:imageData
+            group
         });
 };
