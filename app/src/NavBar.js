@@ -10,7 +10,7 @@ class NavBar extends React.Component {
                 <Navbar.Header>
                     <Navbar.Brand>
                         <LinkContainer to="/">
-                            <a className="nav-animation">pic-crypt</a>
+                            <a >pic-crypt</a>
                         </LinkContainer>
                     </Navbar.Brand>
                     <Navbar.Toggle/>
@@ -18,10 +18,10 @@ class NavBar extends React.Component {
                 <Navbar.Collapse>
                     <Nav>
                         <LinkContainer to="/encode">
-                            <NavItem  className="nav-animation" eventKey={1} >Encode</NavItem>
+                            <NavItem  eventKey={1} >Encode</NavItem>
                         </LinkContainer>
                         <LinkContainer to="/decode">
-                            <NavItem className="nav-animation" eventKey={2}>Decode</NavItem>
+                            <NavItem eventKey={2}>Decode</NavItem>
                         </LinkContainer>
                     </Nav>
                     <Nav pullRight>

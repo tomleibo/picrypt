@@ -1,8 +1,19 @@
 import React from "react";
-import {Button, Col, ControlLabel, FormControl, FormGroup, Grid, HelpBlock, Row, Thumbnail} from "react-bootstrap";
+import {
+    Button,
+    Col,
+    ControlLabel,
+    FormControl,
+    FormGroup,
+    Grid,
+    HelpBlock,
+    Image,
+    Row,
+    Thumbnail
+} from "react-bootstrap";
 import CryptoJs from "crypto-js";
 
-import { Transposition} from "./Transposition";
+import spinner from "./assets/spinner.svg";
 
 export class EncodeForm extends React.Component {
 
@@ -17,7 +28,10 @@ export class EncodeForm extends React.Component {
             plainText: '',
             imageBytes: '',
             imageBytesAfterEncoding: '',
-            encryptionKey: ''
+            encryptionKey: '',
+            generatorIdx: 0,
+            encryptedMessageLenInBits: 0,
+            showSpinner: false
         };
     }
 
@@ -38,39 +52,42 @@ export class EncodeForm extends React.Component {
         e.preventDefault();
 
         const encryptionKey = this.randomKey();
-        this.setState({encryptionKey: encryptionKey});
-        this.setState({
-                imageBytesAfterEncoding: this.injectCipherText(
-                    this.encrypt(encryptionKey))
+        this.setState(
+            {
+                showSpinner: true,
+                encryptionKey: encryptionKey,
             }
+        );
+
+        this.injectCipherText(
+            this.encrypt(encryptionKey)
         );
 
     }
 
-    injectCipherText() {
+    injectCipherText(encryptedPlaintext) {
 
-        // let cyclicGroup = tom.generate();
+        let worker = new Worker("Worker.js");
         const canvas = document.getElementById("banana");
         const ctx = canvas.getContext("2d");
-        let image = document.images[0];
-        ctx.drawImage(image,0,0);
+        let image = document.images[1];
+        ctx.drawImage(image, 0, 0);
+        let imageData = ctx.getImageData(0, 0, image.width, image.height);
+        worker.postMessage([{
+            imageData:imageData.data,
+            encryptedPlaintext
+        }
+        ]);
 
-        let imageData = ctx.getImageData(0,0,image.width,image.height);
-        const tom = new Transposition(imageData.data.length);
-        const { index, group } = tom.generate();
-        let originalData = JSON.parse(JSON.stringify(imageData.data));
-        let pic = tom.conceal(this.state.plainText, imageData.data, group);
-
-        ctx.putImageData(imageData,0,0);
-
-        const da = 1;
-
-        // let conceal = tom.conceal(
-        //     this.state.plainText,
-        //     this.state.imageBytes,
-        //     cyclicGroup.group
-        // );
-        return this.state.imageBytes;
+        worker.onmessage = (e) => {
+            const {imageBytesAfterEncoding,index,encryptedMessageLenInBits} = e.data;
+            this.setState({
+                generatorIdx: index,
+                encryptedMessageLenInBits: encryptedMessageLenInBits,
+                showSpinner: false,
+                imageBytesAfterEncoding
+            });
+        };
     }
 
     encrypt(key) {
@@ -133,30 +150,36 @@ export class EncodeForm extends React.Component {
                             readOnly
                             type="text"
                             placeholder=""
-                            value={this.state.encryptionKey}/>
+                            value={`password:   ${this.state.encryptionKey}\n
+                            cyclic group indx:   ${this.state.generatorIdx}
+                            message length in bits: ${this.state.encryptedMessageLenInBits}`}/>
                         <FormControl.Feedback/>
                         <HelpBlock>random permutation of [a-z] </HelpBlock>
                     </FormGroup>
+
+
                     <Button type="submit" bsStyle="primary" onClick={this.onSubmit}>Encode</Button>
+                    <Image src={spinner} className={`spinner ${this.state.showSpinner ? "" : "hidden"}`}/>
 
                 </form>
                 <hr/>
                 <Grid className="encode-images-grid">
                     <Row>
                         <Col xs={6} md={6}>
-                            <Thumbnail id="ItemPreview1" src={`data:image/png;base64,${btoa(this.state.imageBytes)}`}
-                                   alt="before-encoding" rounded responcive>
+                            <Thumbnail id="ItemPreview1" src={`data:image/bmp;base64,${btoa(this.state.imageBytes)}`}
+                                       alt="before-encoding" rounded={"true"} responcive={"true"}>
                                 <h3>Original Image</h3>
-                                <p>the image before injecting the text: {this.state.plainText.substring(0,10)}</p>
+                                <p>the image before injecting the text: {this.state.plainText.substring(0, 10)}</p>
                             </Thumbnail>
                         </Col>
                         <Col xs={6} md={6}>
-                            <canvas id="banana"></canvas>
-                            {/*<Thumbnail id="ItemPreview2" src={`data:image/png;base64,${btoa(this.state.imageBytesAfterEncoding)}`}*/}
-                                   {/*alt="after-encoding" rounded responcive>*/}
-                                {/*<h3>Injected Image</h3>*/}
-                                {/*<p>Try to notice differences!</p>*/}
-                            {/*</Thumbnail>*/}
+                            <canvas id="banana" className={"hidden"}/>
+                            <Thumbnail id="ItemPreview2"
+                                       src={`data:image/bmp;base64,${btoa(this.state.imageBytesAfterEncoding)}`}
+                                       alt="after-encoding" rounded responcive>
+                                <h3>Injected Image</h3>
+                                <p>Try to notice differences!</p>
+                            </Thumbnail>
                         </Col>
                     </Row>
                 </Grid>

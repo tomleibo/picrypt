@@ -247,13 +247,13 @@ transposition.restore(g);
 */
 
 
-var pixelData2 = [1,2,3,4,5,6,7,8,255,254,253,123,124,125,234,235];
-var pixelData3 = [1,2,3,0,4,5,6,0,7,8,255,0,254,253,123,0,124,125,234,0,235];
-console.log(pixelData2);
-var t = new Transposition(pixelData2.length);
-var result = t.generate();
-console.log(result.group);
-var newData = t.conceal("p", pixelData3, result.group);
-console.log(newData);
-console.log(t.reveal(newData, result.group, 8));
+// var pixelData2 = [1,2,3,4,5,6,7,8,255,254,253,123,124,125,234,235];
+// var pixelData3 = [1,2,3,0,4,5,6,0,7,8,255,0,254,253,123,0,124,125,234,0,235];
+// console.log(pixelData2);
+// var t = new Transposition(pixelData2.length);
+// var result = t.generate();
+// console.log(result.group);
+// var newData = t.conceal("p", pixelData3, result.group);
+// console.log(newData);
+// console.log(t.reveal(newData, result.group, 8));
 
