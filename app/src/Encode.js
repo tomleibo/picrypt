@@ -68,7 +68,7 @@ export class EncodeForm extends React.Component {
 
     injectCipherText(encryptedPlaintext) {
 
-        let worker = new Worker("Worker.js");
+        let worker = new Worker(`${document.location.host === 'localhost' ? "" : "latest/"}Worker.js`);
         const canvas = document.getElementById("banana");
         const ctx = canvas.getContext("2d");
         let image = document.images[1];
