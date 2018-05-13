@@ -88,6 +88,20 @@ export class EncodeForm extends React.Component {
                 imageData.data,
                 group
             );
+            ctx.putImageData(imageData,0,0);
+
+            const blobCallback = iconName => {
+                return b => {
+                    let a = document.createElement('a');
+                    a.textContent = 'Download';
+
+                    document.body.appendChild(a);
+                    a.style.display = 'block';
+                    a.download = iconName + '.bmp';
+                    a.href = window.URL.createObjectURL(b);
+                }
+            };
+            canvas.toBlob(blobCallback('injected'), 'image/bmp', 1,'-moz-parse-options:format=bmp;bpp=32');
             this.setState({
                 generatorIdx: index,
                 encryptedMessageLenInBits: encryptedMessageLenInBits,
@@ -181,12 +195,12 @@ export class EncodeForm extends React.Component {
                         </Col>
                         <Col xs={6} md={6}>
                             <canvas id="banana" className={"hidden"}/>
-                            <Thumbnail id="ItemPreview2"
-                                       src={`data:image/bmp;base64,${btoa(this.state.imageBytesAfterEncoding)}`}
-                                       alt="after-encoding" rounded responcive>
-                                <h3>Injected Image</h3>
-                                <p>Try to notice differences!</p>
-                            </Thumbnail>
+                            {/*<Thumbnail id="ItemPreview2"*/}
+                                       {/*src={`data:image/bmp;base64,${btoa(this.state.imageBytesAfterEncoding)}`}*/}
+                                       {/*alt="after-encoding" rounded responcive>*/}
+                                {/*<h3>Injected Image</h3>*/}
+                                {/*<p>Try to notice differences!</p>*/}
+                            {/*</Thumbnail>*/}
                         </Col>
                     </Row>
                 </Grid>

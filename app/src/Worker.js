@@ -11,7 +11,7 @@ onmessage = function(e) {
     const {index, group} = transposition.generate();
     console.log(`group is ${group} index is: ${index}`);
     const encryptedMessageLenInBits = transposition
-        .stringToBin(encryptedPlaintext);
+        .stringToBin(encryptedPlaintext).length;
 
 
     console.log('Posting message back to main script');
