@@ -3,11 +3,11 @@ import {Transposition} from "./Transposition";
 onmessage = function(e) {
 
     console.log('Message received from main script with keys:' + Object.keys(e.data[0]));
-    const pixels = [];
     const imageData          = e.data[0].imageData;
+    let pixels = new Uint8Array(imageData.length);
     const encryptedPlaintext = e.data[0].encryptedPlaintext;
-    for(let i = 100; i< imageData.length;i++){
-        pixels.push(imageData[i])
+    for(let i = 55; i< imageData.length;i++){
+        pixels[i]=imageData[i]
     }
     const transposition      = new Transposition(pixels.length);
 
@@ -18,7 +18,7 @@ onmessage = function(e) {
         pixels,
         group);
 
-    for(let i = 100; i< imageData.length;i++){
+    for(let i = 55; i< imageData.length;i++){
         imageData[i] = pixels[i]
     }
 
