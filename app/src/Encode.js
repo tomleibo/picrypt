@@ -73,7 +73,9 @@ export class EncodeForm extends React.Component {
         const ctx = canvas.getContext("2d");
         let image = document.images[1];
         ctx.drawImage(image, 0, 0);
-        let imageData = ctx.getImageData(0, 0, image.width, image.height);
+        // 618 × 239
+        let imageData = ctx.getImageData(0, 0, 618, 239);
+        console.log(`width: ${image.width}, height: ${image.height}`);
         worker.postMessage([{
             imageData:imageData.data,
             encryptedPlaintext
@@ -194,7 +196,7 @@ export class EncodeForm extends React.Component {
                             </Thumbnail>
                         </Col>
                         <Col xs={6} md={6}>
-                            <canvas id="banana" className={"hidden"}/>
+                            <canvas id="banana" className={"hidden"} style={{width:618,height:239}}/>
                             {/*<Thumbnail id="ItemPreview2"*/}
                                        {/*src={`data:image/bmp;base64,${btoa(this.state.imageBytesAfterEncoding)}`}*/}
                                        {/*alt="after-encoding" rounded responcive>*/}
