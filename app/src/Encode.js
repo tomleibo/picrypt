@@ -14,7 +14,6 @@ import {
 import CryptoJs from "crypto-js";
 
 import spinner from "./assets/spinner.svg";
-import {Transposition} from "./Transposition";
 
 export class EncodeForm extends React.Component {
 
@@ -27,8 +26,8 @@ export class EncodeForm extends React.Component {
 
         this.state = {
             plainText: '',
-            imageBytes: '',
-            imageBytesAfterEncoding: '',
+            imageBytes: [],
+            imageBytesAfterEncoding: [],
             encryptionKey: '',
             generatorIdx: 0,
             encryptedMessageLenInBits: 0,
@@ -69,46 +68,20 @@ export class EncodeForm extends React.Component {
     injectCipherText(encryptedPlaintext) {
 
         let worker = new Worker(`${document.location.host === 'localhost' ? "" : "latest/"}Worker.js`);
-        const canvas = document.getElementById("banana");
-        const ctx = canvas.getContext("2d");
-        let image = document.images[1];
-        ctx.drawImage(image, 0, 0);
-        // 618 × 239
-        let imageData = ctx.getImageData(0, 0, 618, 239);
-        console.log(`width: ${image.width}, height: ${image.height}`);
+
         worker.postMessage([{
-            imageData:imageData.data,
+            imageData:this.state.imageBytes,
             encryptedPlaintext
         }
         ]);
 
         worker.onmessage = (e) => {
-            const {encryptedMessageLenInBits,index,group} = e.data;
-            const transposition = new Transposition(imageData.data.length);
-            transposition.conceal(
-                encryptedPlaintext,
-                imageData.data,
-                group
-            );
-            ctx.putImageData(imageData,0,0);
-
-            const blobCallback = iconName => {
-                return b => {
-                    let a = document.createElement('a');
-                    a.textContent = 'Download';
-
-                    document.body.appendChild(a);
-                    a.style.display = 'block';
-                    a.download = iconName + '.bmp';
-                    a.href = window.URL.createObjectURL(b);
-                }
-            };
-            canvas.toBlob(blobCallback('injected'), 'image/bmp', 1,'-moz-parse-options:format=bmp;bpp=32');
+            const {encryptedMessageLenInBits,index,data} = e.data;
             this.setState({
                 generatorIdx: index,
                 encryptedMessageLenInBits: encryptedMessageLenInBits,
                 showSpinner: false,
-                imageBytesAfterEncoding: imageData
+                imageBytesAfterEncoding: data
             });
         };
     }
@@ -135,7 +108,7 @@ export class EncodeForm extends React.Component {
         reader.onload = () => {
             const arrayBuffer = reader.result;
             const array = new Uint8Array(arrayBuffer);
-            this.setState({imageBytes: String.fromCharCode.apply(null, array)});
+            this.setState({imageBytes:  array});
         }
     }
 
@@ -189,20 +162,25 @@ export class EncodeForm extends React.Component {
                 <Grid className="encode-images-grid">
                     <Row>
                         <Col xs={6} md={6}>
-                            <Thumbnail id="ItemPreview1" src={`data:image/bmp;base64,${btoa(this.state.imageBytes)}`}
+
+                            <Thumbnail id="ItemPreview1" src={`data:image/bmp;base64,${btoa(
+                                String.fromCharCode.apply(null,this.state.imageBytes)
+                            )}`}
                                        alt="before-encoding" rounded={"true"} responcive={"true"}>
                                 <h3>Original Image</h3>
                                 <p>the image before injecting the text: {this.state.plainText.substring(0, 10)}</p>
                             </Thumbnail>
                         </Col>
                         <Col xs={6} md={6}>
-                            <canvas id="banana" className={"hidden"} style={{width:618,height:239}}/>
-                            {/*<Thumbnail id="ItemPreview2"*/}
-                                       {/*src={`data:image/bmp;base64,${btoa(this.state.imageBytesAfterEncoding)}`}*/}
-                                       {/*alt="after-encoding" rounded responcive>*/}
-                                {/*<h3>Injected Image</h3>*/}
-                                {/*<p>Try to notice differences!</p>*/}
-                            {/*</Thumbnail>*/}
+
+                            <Thumbnail id="ItemPreview2"
+                                       src={`data:image/bmp;base64,${btoa(
+                                           String.fromCharCode.apply(null,this.state.imageBytesAfterEncoding)
+                                       )}`}
+                                       alt="after-encoding" rounded responcive>
+                                <h3>Injected Image</h3>
+                                <p>Try to notice differences!</p>
+                            </Thumbnail>
                         </Col>
                     </Row>
                 </Grid>
