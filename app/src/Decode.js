@@ -66,17 +66,31 @@ export class DecodeForm extends React.Component {
         const BMP_HEADER_SIZE = 55;
         const trans = new Transposition(this.state.imageBytes.length - BMP_HEADER_SIZE);
         let {index,group} = trans.restore(this.state.cyclicGroupIdx);
+        let pixels = this.removeBmpHeader(BMP_HEADER_SIZE);
 
-        const imageData = this.state.imageBytes;
-        let pixels = new Uint8Array(imageData.length - BMP_HEADER_SIZE);
-        for(let i = BMP_HEADER_SIZE; i< imageData.length;i++){
-            pixels[i-BMP_HEADER_SIZE]=imageData[i]
-        }
-        let decodedMessage = trans.reveal(pixels,group,this.state.encryptedMessageLenInBits);
+        let decodedMessage = trans.reveal(
+            pixels,
+            group,
+            this.state.encryptedMessageLenInBits
+        );
         console.log(`encrypted: ${decodedMessage}`);
-        decodedMessage = CryptoJs.AES.decrypt(decodedMessage,this.state.encryptionKey).toString();
+        decodedMessage = CryptoJs.AES.decrypt(
+            decodedMessage,
+            this.state.encryptionKey
+        ).toString(CryptoJs.enc.Utf8);
+
         console.log(`decrypted: ${decodedMessage}`);
         this.setState({decodedMessage});
+    }
+
+    removeBmpHeader(BMP_HEADER_SIZE) {
+        const imageData = this.state.imageBytes;
+
+        let pixels = new Uint8Array(imageData.length - BMP_HEADER_SIZE);
+        for (let i = 0; i < imageData.length - BMP_HEADER_SIZE; i++) {
+            pixels[i] = imageData[i + BMP_HEADER_SIZE]
+        }
+        return pixels;
     }
 
     render() {

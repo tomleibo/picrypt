@@ -18,6 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build ; webpack src/Worker.js   build/Worker.js",
+    "build:workers": "webpack src/Worker.js   build/Worker.js",
     "dist": "rm -rf dist && mkdir dist && cp -R build dist && cp claudia/* dist &&  cd dist && sed -i .banana 's%/static/css%/latest/static/css%g' build/index.html && sed -i .banana 's%/static/js%/latest/static/js%g' build/index.html && sed -i .banana 's%static/media%latest/static/media%g' build/static/js/main.*.js && sed -i .banana 's%/static/media%/latest/static/media%g' build/static/css/main.*.css && rm build/index.html.banana && echo 'ALL GREEN :)'",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
