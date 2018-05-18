@@ -31,7 +31,8 @@ export class EncodeForm extends React.Component {
             encryptionKey: '',
             generatorIdx: 0,
             encryptedMessageLenInBits: 0,
-            showSpinner: false
+            showSpinner: false,
+            progressMsg: ''
         };
     }
 
@@ -75,13 +76,20 @@ export class EncodeForm extends React.Component {
         }]);
 
         worker.onmessage = (e) => {
-            const {encryptedMessageLenInBits,index,data} = e.data;
-            this.setState({
-                generatorIdx: index,
-                encryptedMessageLenInBits: encryptedMessageLenInBits,
-                showSpinner: false,
-                imageBytesAfterEncoding: data
-            });
+            let isUpdateEvent = Object.keys(e.data).indexOf("progressMsg") !== -1;
+            if (isUpdateEvent) {
+                let progressMsg = e.data.progressMsg.substring(0,150) + "...";
+                this.setState({progressMsg})
+            } else {
+                const {encryptedMessageLenInBits, index, data} = e.data;
+                this.setState({
+                    generatorIdx: index,
+                    encryptedMessageLenInBits: encryptedMessageLenInBits,
+                    showSpinner: false,
+                    imageBytesAfterEncoding: data
+                });
+            }
+
         };
     }
 
@@ -158,6 +166,7 @@ export class EncodeForm extends React.Component {
                     <Button type="submit" bsStyle="primary" onClick={this.onSubmit}>Encode</Button>
                 </form>
                 <Image src={spinner} className={`spinner ${this.state.showSpinner ? "spinner" : "hidden"}`}/>
+                <p className={`spinner ${this.state.showSpinner ? "" : "hidden"}`}> {this.state.progressMsg} </p>
                 <hr/>
                 <Grid className="encode-images-grid">
                     <Row>

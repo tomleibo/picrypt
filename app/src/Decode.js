@@ -22,7 +22,8 @@ export class DecodeForm extends React.Component {
             cyclicGroupIdx: '',
             decodedMessage: '',
             imageBytes: '',
-            showSpinner: false
+            showSpinner: false,
+            progressMsg: ''
         };
     }
 
@@ -80,12 +81,18 @@ export class DecodeForm extends React.Component {
         this.setState({showSpinner:true});
 
         worker.onmessage = (e) => {
-            const decodedMessage =  e.data.decodedMessage;
-            console.log(`got msg from worker: ${decodedMessage}`);
-            this.setState({
-                decodedMessage,
-                showSpinner:false
-            });
+            let isUpdateEvent = Object.keys(e.data).indexOf("progressMsg") !== -1;
+            if (isUpdateEvent) {
+                let progressMsg = e.data.progressMsg.substring(0,150) + "...";
+                this.setState({progressMsg})
+            } else {
+                const decodedMessage = e.data.decodedMessage;
+                console.log(`got msg from worker: ${decodedMessage}`);
+                this.setState({
+                    decodedMessage,
+                    showSpinner: false
+                });
+            }
 
         };
 
@@ -143,6 +150,7 @@ export class DecodeForm extends React.Component {
                 </FormGroup>
                 <Button type="submit" bsStyle="primary" onClick={this.onSubmit}>Decode</Button>
                 <Image src={spinner} className={`spinner ${this.state.showSpinner ? "spinner" : "hidden"}`}/>
+                <p className={`spinner ${this.state.showSpinner ? "" : "hidden"}`}> {this.state.progressMsg} </p>
                 <hr/>
                 <FormGroup>
                     <ControlLabel>Message</ControlLabel>

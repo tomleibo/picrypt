@@ -106,7 +106,7 @@ Transposition.prototype.randomArrayIndex = function(size) {
 };
 
 Transposition.prototype.sendUIEvent = function(msg) {
-	console.log(msg);
+	postMessage({progressMsg:msg})
 };
 
 Transposition.prototype.generate = function() {
