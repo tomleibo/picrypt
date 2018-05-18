@@ -67,13 +67,12 @@ export class EncodeForm extends React.Component {
 
     injectCipherText(encryptedPlaintext) {
 
-        let worker = new Worker(`${document.location.host === 'localhost' ? "" : "latest/"}Worker.js`);
+        let worker = new Worker(`latest/EncodeWorker.js`);
 
         worker.postMessage([{
             imageData:this.state.imageBytes,
             encryptedPlaintext
-        }
-        ]);
+        }]);
 
         worker.onmessage = (e) => {
             const {encryptedMessageLenInBits,index,data} = e.data;
@@ -157,9 +156,8 @@ export class EncodeForm extends React.Component {
 
 
                     <Button type="submit" bsStyle="primary" onClick={this.onSubmit}>Encode</Button>
-                    <Image src={spinner} className={`spinner ${this.state.showSpinner ? "" : "hidden"}`}/>
-
                 </form>
+                <Image src={spinner} className={`spinner ${this.state.showSpinner ? "spinner" : "hidden"}`}/>
                 <hr/>
                 <Grid className="encode-images-grid">
                     <Row>

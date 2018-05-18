@@ -1,7 +1,10 @@
 import React from "react";
-import {Button, ControlLabel, FormControl, FormGroup, HelpBlock} from "react-bootstrap";
-import {Transposition} from "./Transposition";
-import CryptoJs from "crypto-js";
+import {Button, ControlLabel, FormControl, FormGroup, HelpBlock, Image} from "react-bootstrap";
+
+
+
+import spinner from "./assets/spinner.gif";
+
 
 export class DecodeForm extends React.Component {
     constructor(props, context) {
@@ -18,7 +21,8 @@ export class DecodeForm extends React.Component {
             encryptedMessageLenInBits: '',
             cyclicGroupIdx: '',
             decodedMessage: '',
-            imageBytes: ''
+            imageBytes: '',
+            showSpinner: false
         };
     }
 
@@ -63,35 +67,30 @@ export class DecodeForm extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        const BMP_HEADER_SIZE = 55;
-        const trans = new Transposition(this.state.imageBytes.length - BMP_HEADER_SIZE);
-        let {index,group} = trans.restore(this.state.cyclicGroupIdx);
-        let pixels = this.removeBmpHeader(BMP_HEADER_SIZE);
 
-        let decodedMessage = trans.reveal(
-            pixels,
-            group,
-            this.state.encryptedMessageLenInBits
-        );
-        console.log(`encrypted: ${decodedMessage}`);
-        decodedMessage = CryptoJs.AES.decrypt(
-            decodedMessage,
-            this.state.encryptionKey
-        ).toString(CryptoJs.enc.Utf8);
+        let worker = new Worker(`latest/DecodeWorker.js`);
 
-        console.log(`decrypted: ${decodedMessage}`);
-        this.setState({decodedMessage});
+        worker.postMessage({
+            imageBytes: this.state.imageBytes,
+            cyclicGroupIdx: this.state.cyclicGroupIdx,
+            encryptedMessageLenInBits: this.state.encryptedMessageLenInBits,
+            encryptionKey: this.state.encryptionKey
+        });
+
+        this.setState({showSpinner:true});
+
+        worker.onmessage = (e) => {
+            const decodedMessage =  e.data.decodedMessage;
+            console.log(`got msg from worker: ${decodedMessage}`);
+            this.setState({
+                decodedMessage,
+                showSpinner:false
+            });
+
+        };
+
     }
 
-    removeBmpHeader(BMP_HEADER_SIZE) {
-        const imageData = this.state.imageBytes;
-
-        let pixels = new Uint8Array(imageData.length - BMP_HEADER_SIZE);
-        for (let i = 0; i < imageData.length - BMP_HEADER_SIZE; i++) {
-            pixels[i] = imageData[i + BMP_HEADER_SIZE]
-        }
-        return pixels;
-    }
 
     render() {
         return (
@@ -143,6 +142,7 @@ export class DecodeForm extends React.Component {
                     <HelpBlock>Cat images are not allowed.</HelpBlock>
                 </FormGroup>
                 <Button type="submit" bsStyle="primary" onClick={this.onSubmit}>Decode</Button>
+                <Image src={spinner} className={`spinner ${this.state.showSpinner ? "spinner" : "hidden"}`}/>
                 <hr/>
                 <FormGroup>
                     <ControlLabel>Message</ControlLabel>

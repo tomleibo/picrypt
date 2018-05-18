@@ -5,8 +5,12 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-app.get('/Worker.js', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'Worker.js'));
+app.get('/EncodeWorker.js', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'EncodeWorker.js'));
+});
+
+app.get('/DecodeWorker.js', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'DecodeWorker.js'));
 });
 
 app.get('/', function (req, res) {
