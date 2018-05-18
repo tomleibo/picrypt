@@ -140,7 +140,7 @@ Transposition.prototype.algorithm = function(n, generatorIndex) {
 	this.sendUIEvent("using generator = "+newGenerator);
 	this.sendUIEvent("generating cyclic group");
     var cyclicGroup = this.generateCyclicGroup(newGenerator);
-	return { "index": generatorIndex, "group": cyclicGroup};
+	return { index: generatorIndex, group: cyclicGroup};
 };
 
 Transposition.prototype.stringToBin = function(input) {
@@ -177,7 +177,7 @@ Transposition.prototype.conceal = function(plainText, pixelData, cyclicGroup) {
     console.log("concealing " + binaryText);
     var pixel;
     for (var i in binaryText) {
-        var pixelIndex = this.groupIndexToPixelIndex(cyclicGroup[i]);
+        var pixelIndex = cyclicGroup[i];
         pixel = pixelData[pixelIndex];
         var bitIsSet = binaryText[i] == '1';
         var pixelIsEven = pixel % 2 == 0;
@@ -200,12 +200,8 @@ Transposition.prototype.conceal = function(plainText, pixelData, cyclicGroup) {
 Transposition.prototype.reveal = function(pixelData, cyclicGroup, length) {
     var binary = "";
     for (var i = 0; i<length; i++) {
-        var pixelIndex = this.groupIndexToPixelIndex(cyclicGroup[i]);
-        if (pixelData[pixelIndex] % 2 == 0) {
-            binary += "0";
-        } else {
-            binary += "1";
-        }
+        var pixelIndex = cyclicGroup[i];
+        binary += pixelData[pixelIndex] % 2 == 0 ? "0" : "1";
     }
     var result = "";
     for (i=0; i<binary.length; i+=8) {
@@ -215,30 +211,7 @@ Transposition.prototype.reveal = function(pixelData, cyclicGroup, length) {
 };
 
 
-//TODO connect with image uploaded and draw onto a real canvas
-Transposition.prototype.draw = function (plainText) {
-	var canvas = document.getElementById("banana");
-    img.onload = function() 	{
-        ctx.drawImage(img,0,0);
-        var pixelData = ctx.getImageData(0, 0, img.width, img.height);
-        // pixelData.data
-        // actual size is X4 than that, but we want to use only the alpha??
-        var colorDataLength = img.width * img.height;
-        for (var i=0; i<binaryPT.length; i++) {
-            if (binaryPT[i] === "1") {
-                pixelData.data[i*4+3]--;
-            }
-        }
-        ctx.putImageData(pixelData,0,0);
-    };
-    var binaryPT = this.stringToBin(plainText);
-    var ctx = canvas.getContext('2d');
-    var img = new Image();
-	//img.src = srcElement.value;
-	// img.src = data;
 
-
-};
 
 /* test to see that encode and decode match
 var transposition = new Transposition(100*100*3);

@@ -4,11 +4,14 @@ onmessage = function(e) {
 
     console.log('Message received from main script with keys:' + Object.keys(e.data[0]));
     const imageData          = e.data[0].imageData;
-    let pixels = new Uint8Array(imageData.length);
+    let BMP_HEADER_SIZE = 55;
     const encryptedPlaintext = e.data[0].encryptedPlaintext;
-    for(let i = 55; i< imageData.length;i++){
-        pixels[i]=imageData[i]
+
+    let pixels = new Uint8Array(imageData.length-BMP_HEADER_SIZE);
+    for(let i = BMP_HEADER_SIZE; i< imageData.length;i++){
+        pixels[i-BMP_HEADER_SIZE]=imageData[i]
     }
+
     const transposition      = new Transposition(pixels.length);
 
     const {index, group} = transposition.generate();
@@ -16,10 +19,11 @@ onmessage = function(e) {
     transposition.conceal(
         encryptedPlaintext,
         pixels,
-        group);
+        group
+    );
 
-    for(let i = 55; i< imageData.length;i++){
-        imageData[i] = pixels[i]
+    for(let i = 0; i< imageData.length;i++){
+        imageData[i+BMP_HEADER_SIZE] = pixels[i]
     }
 
     console.log('Posting message back to main script');

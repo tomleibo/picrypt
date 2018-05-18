@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import CryptoJs from "crypto-js";
 
-import spinner from "./assets/spinner.svg";
+import spinner from "./assets/spinner.gif";
 
 export class EncodeForm extends React.Component {
 
@@ -87,7 +87,9 @@ export class EncodeForm extends React.Component {
     }
 
     encrypt(key) {
-        return CryptoJs.AES.encrypt(this.state.plainText, key).toString();
+        let encrypted = CryptoJs.AES.encrypt(this.state.plainText, key).toString();
+        console.log(`encrypted: ${encrypted}`);
+        return encrypted;
     }
 
 
