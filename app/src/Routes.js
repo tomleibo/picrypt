@@ -13,6 +13,7 @@ export class Routes extends React.PureComponent {
                 <NavBar/>
                 <Header/>
                 <Route exact path="/" component={App} />
+                <Route exact path="/latest" component={App} />
                 <Route path="/encode" component={EncodeForm} />
                 <Route path="/decode" component={DecodeForm} />
                 <Footer/>

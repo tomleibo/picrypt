@@ -1,11 +1,11 @@
 {
   "lambda": {
-    "role": "claudia-test-executor",
+    "role": "dist-executor",
     "name": "dist",
     "region": "us-east-2"
   },
   "api": {
-    "id": "mby1unfd9l",
-    "url": "https://mby1unfd9l.execute-api.us-east-2.amazonaws.com/latest"
+    "id": "w8igudx1k5",
+    "url": "https://w8igudx1k5.execute-api.us-east-2.amazonaws.com/latest"
   }
 }

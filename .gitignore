@@ -3,3 +3,4 @@ stego-graphia/dist
 stego-graphia/node_modules
 *.idea
 node_modules
+../.python-version
