@@ -1,12 +1,5 @@
-/**
- * TODO
- * implement draw which is connected to GUi
- * optional - implement our own isPrime function
- * optional^2 - implement our own modPow
- */
-
 //npm install big-integer
-
+//var bigInt = require("big-integer");
 
 import bigInt from "big-integer";
 
@@ -15,19 +8,58 @@ export var Transposition = function (n) {
 };
 
 /**
+ * Checks if a number is prime or not. Based on Fermat's primality test.
+ * @param x positive integer
+ * @return {boolean} is x prime
+ */
+Transposition.prototype.isPrime = function (x) {
+	var isPrime = this.isBasicPrime(x);
+	if (isPrime !== undefined) {
+		return isPrime;
+	}
+    return !this.isComposite(x);
+};
+
+/**
+ * An implementation of Fermat's primality test.
+ * @param x a positive integer
+ * @return boolean true, if the number was found to be composite, or, undefined otherwise.
+ */
+Transposition.prototype.isComposite = function (p) {
+	const FERMAT_TEST_COUNT = 100;
+	for (var i = 0; i < FERMAT_TEST_COUNT; i++) {
+		var rand =  Math.floor(Math.random() * (p - 3) + 2);
+		if (bigInt(rand).modPow(p-1,p).toJSNumber() !== 1) {
+			return true;
+		}
+	}
+};
+
+/**
+ * Tests some basic cases for integer primality. Is designed to be run before Miller Rabin tests are performed.
+ * @param x a positive integer
+ * @return {boolean} true if prime, false if composite or, undefined if no definite answer can be given.
+ */
+Transposition.prototype.isBasicPrime = function (x) {
+	if (x == 1 || x == 2 || x == 3 || x == 5 || x == 7) {
+		return true;
+	}
+	if (x % 2 == 0 || x % 3 == 0 || x % 5 == 0 || x % 7 == 0) {
+		return false;
+	}
+};
+
+/**
  * @param x a natural number
  * @return {number} the biggest prime that is smaller than x
  */
 Transposition.prototype.findBiggestPrimeSmallerThan = function(x) {
-	//throw "there is a bug here. 7997989 is always the answer"
-	var big;
-	for (var i=x-1; i>1; i--) {
-		big = bigInt(i);
-		if (big.isPrime()) {
+	for (var i = x-1; i>1; i--) {
+		if (this.isPrime(i)) {
 			break;
 		}
 	}
-	return big.toJSNumber();	
+	return i;
 };
 
 /**
@@ -209,24 +241,3 @@ Transposition.prototype.reveal = function(pixelData, cyclicGroup, length) {
     }
     return result;
 };
-
-
-
-
-/* test to see that encode and decode match
-var transposition = new Transposition(100*100*3);
-var g = transposition.generate();
-transposition.restore(g);
-*/
-
-
-// var pixelData2 = [1,2,3,4,5,6,7,8,255,254,253,123,124,125,234,235];
-// var pixelData3 = [1,2,3,0,4,5,6,0,7,8,255,0,254,253,123,0,124,125,234,0,235];
-// console.log(pixelData2);
-// var t = new Transposition(pixelData2.length);
-// var result = t.generate();
-// console.log(result.group);
-// var newData = t.conceal("p", pixelData3, result.group);
-// console.log(newData);
-// console.log(t.reveal(newData, result.group, 8));
-
